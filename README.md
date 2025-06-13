@@ -39,7 +39,8 @@ library in `/usr/lib/libtorch.so`.
 
 If the `LIBTORCH_USE_PYTORCH` environment variable is set, the active python
 interpreter is called to retrieve information about the torch python package.
-This version is then linked against.
+This version is then linked against. Use `LIBTORCH_PYTHON` to explicitly provide 
+a path to the interpreter to use.
 
 ### Libtorch Manual Install
 
