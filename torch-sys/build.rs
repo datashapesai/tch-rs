@@ -178,8 +178,8 @@ impl SystemInfo {
             os => anyhow::bail!("unsupported TARGET_OS '{os}'"),
         };
 
-        /// Check to see if path to python interpreter was specified.
-        let python_interpreter = if let Some(path) = env::var_os("LIBTORCH_PYTHON") {
+        // Check to see if path to python interpreter was specified.
+        let python_interpreter = if let Ok(path) = env_var_rerun("LIBTORCH_PYTHON") {
             PathBuf::from(path)
         }
         else {
