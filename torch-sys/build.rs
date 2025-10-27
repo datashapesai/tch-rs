@@ -48,6 +48,7 @@ enum Os {
     Linux,
     Macos,
     Windows,
+    Android,
 }
 
 #[allow(dead_code)]
@@ -175,6 +176,7 @@ impl SystemInfo {
             "linux" => Os::Linux,
             "windows" => Os::Windows,
             "macos" => Os::Macos,
+            "android" => Os::Android,
             os => anyhow::bail!("unsupported TARGET_OS '{os}'"),
         };
 
@@ -187,7 +189,7 @@ impl SystemInfo {
             // https://github.com/PyO3/maturin/blob/243b8ec91d07113f97a6fe74d9b2dcb88086e0eb/src/target.rs#L547
             match os {
                 Os::Windows => PathBuf::from("python.exe"),
-                Os::Linux | Os::Macos => {
+                Os::Linux | Os::Macos | Os::Android=> {
                     if env::var_os("VIRTUAL_ENV").is_some() {
                         PathBuf::from("python")
                     } else {
@@ -352,6 +354,7 @@ impl SystemInfo {
                         "cu128" => "%2Bcu128",
                         _ => ""
                     }),
+                    Os::Android => unimplemented!("pre-existing android builds are not available")
             };
 
                 let filename = libtorch_dir.join(format!("v{TORCH_VERSION}.zip"));
@@ -378,7 +381,7 @@ impl SystemInfo {
         }
 
         match self.os {
-            Os::Linux | Os::Macos => {
+            Os::Linux | Os::Macos | Os::Android => {
                 // Pass the libtorch lib dir to crates that use torch-sys. This will be available
                 // as DEP_TORCH_SYS_LIBTORCH_LIB, see:
                 // https://doc.rust-lang.org/cargo/reference/build-scripts.html#the-links-manifest-key
